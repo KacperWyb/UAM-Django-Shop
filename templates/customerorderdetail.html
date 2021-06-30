@@ -1,0 +1,47 @@
+{% extends "base.html" %}
+{% load humanize %}
+
+{% block title %}Szczegóły zamówienia{% endblock %}
+
+{% block content %}
+<div class="container">
+    <div class="row">
+        <div class="col-md-8 mx-auto">
+            <h3>Szczegóły zamówienia</h3><hr>
+            <p><span class="font-weight-bold">ID zamówienia: </span> #_{{ord_obj.id}}</p>
+            <p><span class="font-weight-bold">Status zamówienia: </span> {{ord_obj.order_status}}</p>
+            <p><span class="font-weight-bold">Data zamówienia: </span> {{ord_obj.created_at}} ({{ord_obj.created_at|timesince}})</p>
+            <p><span class="font-weight-bold">Informacje dla klientów: </span> {% if ord_obj.ordered_by %} {{ord_obj.ordered_by}}, {% endif %} {{ord_obj.mobile}}</p>
+            <p><span class="font-weight-bold">Adres wysyłki: </span> {{ord_obj.shipping_address}} ({{ord_obj.email}})</p>
+            <h4>Zamówione produkty</h4>
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th></th>
+                        <th>Produkt</th>
+                        <th>Cena</th>
+                        <th>Ilość</th>
+                        <th>Suma</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for cp in ord_obj.cart.cartproduct_set.all %}
+                    <tr>
+                        <td>{{forloop.counter}}</td>
+                        <td><a target="_blank" href="{% url 'ecomapp:productdetail' cp.product.slug %}">{{cp.product.title}}</a></td>
+                        <td>{{cp.rate}} zł</td>
+                        <td>{{cp.quantity}} szt.</td>
+                        <td>{{cp.subtotal}} zł</td>
+                    </tr>
+                    {% endfor %}
+                    <tr>
+                        <th colspan="4" class="text-right">Razem: </th>
+                        <th>{{ord_obj.total|intcomma}} zł</th>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+{% endblock %}

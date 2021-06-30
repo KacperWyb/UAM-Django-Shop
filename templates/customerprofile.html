@@ -1,0 +1,45 @@
+{% extends 'base.html' %}
+
+{% block title %}Profil{% endblock %}
+
+{% block content %}
+<div class="container">
+    <div class="row">
+        <div class="col-md-4">
+            <h3>Szczegółowe informacje</h3><hr>
+            <p><span class="font-weight-bold">Imię i nazwisko: </span> {{customer.imię_i_nazwisko}}</p>
+            <p><span class="font-weight-bold">E-mail: </span> {{customer.user.email}}</p>
+            {% if customer.address %}
+            <p><span class="font-weight-bold">Adres: </span> {{customer.address}}</p>
+            {% endif %}
+            <p><span class="font-weight-bold">Dołączył: </span> {{customer.joined_on}}</p>
+        </div>
+        <div class="col-md-8">
+            <h3>Wcześniejsze zamówienia</h3>
+            <hr>
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th></th>
+                        <th>ID zamówienia</th>
+                        <th>Suma</th>
+                        <th>Zamówiono dnia</th>
+                        <th>Status</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for ord in orders %}
+                    <tr>
+                        <td>{{forloop.counter}}</td>
+                        <td><a href="{% url 'ecomapp:customerorderdetail' ord.pk %}"> #_{{ord.id}}</a></td>
+                        <td>{{ord.total}} zł</td>
+                        <td>{{ord.created_at|timesince}} temu</td>
+                        <td>{{ord.order_status}}</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,45 @@
+{% extends 'base.html' %}
+
+{% block title %}{{product.title}}{% endblock %}
+
+{% block content %}
+<div class="container">
+    <h3>Produkt: {{product.title}}</h3><hr>
+    <div class="row">
+        <div class="col-md-4">
+            <img src="{{product.image.url}}" alt="" class="img-fluid">
+            <div class="row">
+                {% for pi in product.productimage_set.all %}
+                <div class="col-md-4 p-3">
+                    <a href="{{pi.image.url}}" target="_blank">
+                        <img src="{{pi.image.url}}" class="img-fluid" style="height: 100px; object-fit: contain;" alt="">
+                    </a>
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+        <div class="col-md-8">
+            <h4>{{product.title}} (Wyświetlono {{product.view_count}} razy)</h4>
+            <h5>Kategoria: {{product.category}}</h5>
+            {% if p.selling_price != p.marked_price %}
+            <h5>Cena: <s>{{product.marked_price}} zł</s> <b>{{product.selling_price}} zł </b></h5>
+            {% else %}
+            <h5 class="mt-3">Cena: {{product.marked_price}} zł</h5>
+            {% endif %}
+            <a href="{% url 'ecomapp:addtocart' product.id %}" class="btn btn-info">Dodaj do koszyka</a>
+            <hr>
+            {% if product.warranty %}
+                <p class="text-info">Gwarancja: {{product.warranty}}</p>
+            {% endif %}
+            {% if product.return_policy %}
+                <p class="text-info">Czas na zwrot: {{product.return_policy}}</p>
+            {% endif %}
+            {% if product.warranty and result.return_policy%}
+            <hr>
+            {% endif %}
+            <p>{{product.description}}</p>
+        </div>
+    </div>
+
+</div>
+{% endblock %}

@@ -1,0 +1,28 @@
+{% extends 'base.html' %}
+
+{% block title %} Kategorie {% endblock %}
+
+{% block content %}
+<div class="container">
+    <h3>Wszystkie kategorie</h3><hr>
+    {% for cat in allcategories %}
+    <h4>{{cat.title}}</h4><hr>
+    <div class="row">
+        {% for p in cat.product_set.all %}
+        <div class="col-md-3">
+            <div class="m-4"><center>
+                <h4><a href="{% url 'ecomapp:productdetail' p.slug %}">{{p.title}}</a></h4>
+                <img src="{{p.image.url}}" alt="" class="img-fluid" style="height: 2500; object-fit: cover;">
+                {% if p.selling_price != p.marked_price %}
+                <p class="mt-3">Cena: <s>{{p.marked_price}} zł</s> <b>{{p.selling_price}} zł</b></p>
+                {% else %}
+                <p class="mt-3">Cena: {{p.marked_price}} zł</p>
+                {% endif %}
+                <a href="{% url 'ecomapp:addtocart' p.id %}" class="btn btn-primary">Dodaj do koszyka</a>
+            </center></div>
+        </div>
+        {% endfor %}
+    </div>
+    {% endfor %}
+</div>
+{% endblock %}
